@@ -3,5 +3,6 @@ base:
         - elife
         - elife.java8
         - elife.nginx
+        - elife.docker
         - data-pipeline.nifi
         - data-pipeline
