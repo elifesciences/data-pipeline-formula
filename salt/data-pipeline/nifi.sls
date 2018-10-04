@@ -59,7 +59,7 @@ download-nifi-toolkit:
 install-init-file:
     file.managed:
         - name: /lib/systemd/system/nifi.service
-        - source: salt://nifi-demo/config/lib-systemd-system-nifi.service
+        - source: salt://data-pipeline/config/lib-systemd-system-nifi.service
 
 generate keystore:
     cmd.run:
@@ -77,7 +77,7 @@ generate keystore:
 nifi-config-properties:
     file.managed:
         - name: {{ nifi_dir }}/conf/nifi.properties
-        - source: salt://nifi-demo/config/srv-nifi-conf-nifi.properties
+        - source: salt://data-pipeline/config/srv-nifi-conf-nifi.properties
         - template: jinja
         - defaults:
             dev: {{ pillar.elife.env == 'dev' }}
@@ -88,7 +88,7 @@ nifi-config-properties:
 nifi-config-auth:
     file.managed:
         - name: {{ nifi_dir }}/conf/authorizers.xml
-        - source: salt://nifi-demo/config/srv-nifi-conf-authorizers.xml
+        - source: salt://data-pipeline/config/srv-nifi-conf-authorizers.xml
         - watch_in:
             - service: nifi
 
@@ -104,7 +104,7 @@ nifi:
 nifi-nginx-proxy:
     file.managed:
         - name: /etc/nginx/sites-enabled/nifi-demo.conf
-        - source: salt://nifi-demo/config/etc-nginx-sites-enabled-nifi-demo.conf
+        - source: salt://data-pipeline/config/etc-nginx-sites-enabled-nifi-demo.conf
         - template: jinja
         - watch_in:
             - service: nginx-server-service
@@ -113,11 +113,13 @@ nifi-nginx-proxy:
 # 
 #
 
-# this will need improving
+# this nifi-bigquery-bundle probably won't be around for much longer
+# it's very limited, very brittle and very different to other nifi processors
+
 grr:
     pkg.installed:
         - pkgs:
-            - openjdk-8-jdk
+            - openjdk-8-jdk-headless
             - maven
         - install_recommends: False
 
