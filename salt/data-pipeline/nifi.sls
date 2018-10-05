@@ -143,6 +143,7 @@ build nifi-bigquery-bundle:
             rm -rf /opt/nifi-bigquery-bundle
         - require:
             - git: build nifi-bigquery-bundle
+            - grr
         - watch_in:
             - service: nifi
         - unless:
