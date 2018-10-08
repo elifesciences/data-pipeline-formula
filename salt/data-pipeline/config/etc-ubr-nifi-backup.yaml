@@ -1,0 +1,5 @@
+tar-gzipped:
+    # weekly backup, large, easy to recover with
+    - {{ nifi_dir }}/backup
+    # daily backup, very small, harder to recover with
+    - {{ nifi_dir }}/conf

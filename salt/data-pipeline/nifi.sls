@@ -53,7 +53,7 @@ download-nifi-toolkit:
             - file: download-nifi-toolkit
 
 {% set nifi_dir = "/srv/nifi-1.7.1" %}
-{% set nifi_tk_dir = "/srv/nifi-toolkit-1.7.1" %}
+{% set nifi_toolkit_dir = "/srv/nifi-toolkit-1.7.1" %}
 
 # this creates a /etc/init.d/ init file
 install-init-file:
@@ -148,3 +148,49 @@ build nifi-bigquery-bundle:
             - service: nifi
         - unless:
             - test -f {{ nifi_dir }}/lib/nifi-bigquery-nar-0.1.nar
+
+#
+#
+#
+
+nifi ubr backup:
+    file.managed:
+        - name: /etc/ubr/nifi-backup.yaml
+        - source: salt://data-pipeline/config/etc-ubr-nifi-backup.yaml
+        - template: jinja
+        - defaults:
+            nifi_dir: {{ nifi_dir }}
+
+{% set backup_dir = "/ext/tmp/backup" %}
+
+# nifi can do an elaborate backup that is quite large but easy to restore from
+# what is probably most essential for recovery is the global flow file that is tiny
+# the backup script will, on the first day of the week, do a comprehensive backup
+# and every other day it will do the smaller files/dirs that it needs
+nifi backup script:
+    file.managed:
+        - name: {{ nifi_toolkit_dir }}/backup-nifi.sh
+        - source: salt://data-pipeline/scripts/backup-nifi.sh
+        - template: jinja
+        - defaults:
+            nifi_dir: {{ nifi_dir }}
+            nifi_toolkit_dir: {{ nifi_toolkit_dir }}
+            nifi_backup_dir: {{ backup_dir }}
+
+# see builder-base-formula/salt/elife/backups-cron.sls
+extend:
+    daily-backups:
+        {% if pillar.elife.env in ['dev', 'ci', 'end2end'] %}
+        cron.absent:
+        {% else %}
+        cron.present:
+        {% endif %}
+            - user: root
+            - identifier: daily-app-backups
+            - name: cd {{ nifi_toolkit_dir }} && ./backup-nifi.sh && cd /opt/ubr/ && ./ubr.sh > /var/log/ubr-cron.log && rm -rf {{ backup_dir }}
+            - minute: 0
+            - hour: 23
+            - require:
+                - install-ubr
+                - nifi backup script
+
