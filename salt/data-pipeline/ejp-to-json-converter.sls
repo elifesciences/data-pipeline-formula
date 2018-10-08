@@ -11,14 +11,14 @@ install repo:
 
     # this is what the container will read from
     file.directory:
-        - name: /ext/ejp-xml-scraper/data
+        - name: /ext/ejp-to-json-converter/data
         - makedirs: True
 
 
 # helper script that ties all the docker commands together
 process file script:
     file.managed:
-        - name: /ext/ejp-xml-scraper/process-zip-apply.sh
+        - name: /ext/ejp-to-json-converter/process-zip-apply.sh
         - source: salt://data-pipeline/scripts/process-zip-apply.sh
         - makedirs: True
         - mode: 740
