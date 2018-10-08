@@ -5,5 +5,5 @@ base:
         - elife.nginx
         - elife.docker
         - data-pipeline.nifi
-        - data-pipeline.ejp-xml-scraper
+        - data-pipeline.ejp-to-json-converter
         - data-pipeline
