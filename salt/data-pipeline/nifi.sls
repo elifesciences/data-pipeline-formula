@@ -19,8 +19,11 @@ download-nifi:
         - source_hash: 51dd598178992fa617cb28a8c77028b3
         - makedirs: True
         - replace: False
+        - keep_source: False # is large at 1GB+
         - require:
             - vagrant-root-downloads-link
+        - unless:
+            - test -d /srv/nifi-1.7.1 # file has been unpacked
 
     archive.extracted:
         - user: {{ pillar.elife.deploy_user.username }}
