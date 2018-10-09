@@ -177,6 +177,9 @@ nifi backup script:
             nifi_dir: {{ nifi_dir }}
             nifi_toolkit_dir: {{ nifi_toolkit_dir }}
             nifi_backup_dir: {{ backup_restore_dir }}
+        - require:
+            - download-nifi
+            - download-nifi-toolkit
 
 nifi restore script:
     file.managed:
@@ -188,6 +191,9 @@ nifi restore script:
             nifi_dir: {{ nifi_dir }}
             nifi_toolkit_dir: {{ nifi_toolkit_dir }}
             nifi_restore_dir: {{ backup_restore_dir }}
+        - require:
+            - download-nifi
+            - download-nifi-toolkit
 
 # see builder-base-formula/salt/elife/backups-cron.sls
 extend:
