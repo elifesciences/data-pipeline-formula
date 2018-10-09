@@ -2,7 +2,7 @@
 
 install repo:
     builder.git_latest:
-        - name: git@github.com:elifesciences/data-pipeline-ejp-to-json-converter.git
+        - name: git@github.com:elifesciences/data-pipeline-ejp-to-json-converter
         - identity: {{ pillar.elife.projects_builder.key or '' }}
         - rev: {{ salt['elife.rev']() }}
         - branch: {{ salt['elife.branch']() }}
