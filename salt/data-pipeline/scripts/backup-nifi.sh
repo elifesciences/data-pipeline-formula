@@ -2,9 +2,14 @@
 # run as root from the {{ nifi_toolkit_dir }} directory
 # this script is in charge of managing the {{ nifi_backup_dir }} where ubr will look daily to upload stuff to s3
 
-set -e
+set -ex
 
-if [ $firstdayofweek ]; then
+dayofweek=$(date "+%u")
+
+# part of the cronjob but it doesn't hurt
+rm -rf "{{ nifi_backup_dir }}"
+
+if [ "$dayofweek" -eq "1" ]; then
     # do the comprehensive backup, 1.5GB+
     # UBR will be called immediately afterwards and clear the backup dir
     ./bin/file-manager.sh --operation backup --backupDir {{ nifi_backup_dir }} --nifiCurrentDir {{ nifi_dir }}

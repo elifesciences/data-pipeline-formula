@@ -161,7 +161,7 @@ nifi ubr backup:
         - defaults:
             nifi_dir: {{ nifi_dir }}
 
-{% set backup_dir = "/ext/tmp/backup" %}
+{% set backup_restore_dir = "/ext/tmp/backup" %}
 
 # nifi can do an elaborate backup that is quite large but easy to restore from
 # what is probably most essential for recovery is the global flow file that is tiny
@@ -171,11 +171,23 @@ nifi backup script:
     file.managed:
         - name: {{ nifi_toolkit_dir }}/backup-nifi.sh
         - source: salt://data-pipeline/scripts/backup-nifi.sh
+        - mode: 750
         - template: jinja
         - defaults:
             nifi_dir: {{ nifi_dir }}
             nifi_toolkit_dir: {{ nifi_toolkit_dir }}
-            nifi_backup_dir: {{ backup_dir }}
+            nifi_backup_dir: {{ backup_restore_dir }}
+
+nifi restore script:
+    file.managed:
+        - name: {{ nifi_toolkit_dir }}/restore-nifi.sh
+        - source: salt://data-pipeline/scripts/restore-nifi.sh
+        - mode: 750
+        - template: jinja
+        - defaults:
+            nifi_dir: {{ nifi_dir }}
+            nifi_toolkit_dir: {{ nifi_toolkit_dir }}
+            nifi_restore_dir: {{ backup_restore_dir }}
 
 # see builder-base-formula/salt/elife/backups-cron.sls
 extend:
@@ -187,7 +199,7 @@ extend:
         {% endif %}
             - user: root
             - identifier: daily-app-backups
-            - name: cd {{ nifi_toolkit_dir }} && ./backup-nifi.sh && cd /opt/ubr/ && ./ubr.sh > /var/log/ubr-cron.log && rm -rf {{ backup_dir }}
+            - name: cd {{ nifi_toolkit_dir }} && ./backup-nifi.sh && cd /opt/ubr/ && ./ubr.sh > /var/log/ubr-cron.log && rm -rf {{ backup_restore_dir }}
             - minute: 0
             - hour: 23
             - require:
