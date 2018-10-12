@@ -1,7 +1,10 @@
 # https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
    
 # download nifi and nifi-kit
-# note: too large, for now we just reference the one in the shared folder
+
+{% set nifi_dir = "/srv/nifi-1.7.1" %}
+{% set nifi_ext_dir = "/ext/nifi" %}
+{% set nifi_toolkit_dir = "/srv/nifi-toolkit-1.7.1" %}
 
 # vagrant only
 # guest:/root/downloads -> guest:/vagrant -> host:./builder/downloads
@@ -23,12 +26,12 @@ download-nifi:
         - require:
             - vagrant-root-downloads-link
         - unless:
-            - test -d /srv/nifi-1.7.1 # file has been unpacked
+            - test -d {{ nifi_dir }} # file has been unpacked
 
     archive.extracted:
         - user: {{ pillar.elife.deploy_user.username }}
         - name: /srv/
-        - if_missing: /srv/nifi-1.7.1/
+        - if_missing: {{ nifi_dir }}
         - source: /root/downloads/nifi-1.7.1-bin.tar.gz
         - source_hash: 51dd598178992fa617cb28a8c77028b3
         - keep_source: True # default
@@ -48,15 +51,12 @@ download-nifi-toolkit:
     archive.extracted:
         - user: {{ pillar.elife.deploy_user.username }}
         - name: /srv/
-        - if_missing: /srv/nifi-toolkit-1.7.1
+        - if_missing: {{ nifi_toolkit_dir }}
         - source: /root/downloads/nifi-toolkit-1.7.1-bin.tar.gz
         - source_hash: 3247bb6194977da6dbf90d476289e0de
         - keep_source: True # default
         - require:
             - file: download-nifi-toolkit
-
-{% set nifi_dir = "/srv/nifi-1.7.1" %}
-{% set nifi_toolkit_dir = "/srv/nifi-toolkit-1.7.1" %}
 
 # this creates a /etc/init.d/ init file
 install-init-file:
@@ -85,6 +85,7 @@ nifi-config-properties:
         - defaults:
             dev: {{ pillar.elife.env == 'dev' }}
             nifi_dir: {{ nifi_dir }}
+            nifi_ext_dir: {{ nifi_ext_dir }}
         - watch_in:
             - service: nifi
 
