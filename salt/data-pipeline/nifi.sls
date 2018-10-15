@@ -89,6 +89,14 @@ nifi-config-properties:
         - watch_in:
             - service: nifi
 
+# couldn't find any documentation on the exact keys but this is as far as I can trace AbstractAWSProcessor back:
+# https://github.com/apache/nifi/blob/ea9b0db2f620526c8dd0db595cf8b44c3ef835be/nifi-nar-bundles/nifi-aws-bundle/nifi-aws-abstract-processors/src/main/java/org/apache/nifi/processors/aws/credentials/provider/factory/CredentialPropertyDescriptors.java#L60-L76
+nifi-aws-properties:
+    file.managed:
+        - name: {{ nifi_dir }}/conf/aws.properties
+        - source: salt://data-pipeline/config/srv-nifi-conf-aws.properties
+        - template: jinja
+
 nifi-config-auth:
     file.managed:
         - name: {{ nifi_dir }}/conf/authorizers.xml
