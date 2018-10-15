@@ -113,6 +113,17 @@ nifi-nginx-proxy:
         - watch_in:
             - service: nginx-server-service
 
+
+{% for filename in ["normheader.py", "ejpcsv2json.py"] %}
+nifi-script-{{ filename }}:
+    file.managed:
+        - name: {{ nifi_dir }}/scripts/{{ filename }}
+        - source: salt://data-pipeline/scripts/{{ filename }}
+        - makedirs: True
+        - require:
+            - download-nifi
+{% endfor %}
+
 #
 # 
 #
