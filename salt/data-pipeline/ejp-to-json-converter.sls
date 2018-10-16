@@ -22,6 +22,14 @@ install repo:
         - name: /ext/ejp-to-json-converter/data
         - makedirs: True
 
+# helper script that installs google cloud sdk inside a virtualenv
+install gcloud script:
+    file.managed:
+        - name: /ext/ejp-to-json-converter/gcloud.sh
+        - source: salt://data-pipeline/scripts/gcloud.sh
+        - makedirs: True
+        - mode: 740
+
 # helper script that ties all the docker commands together
 process file script:
     file.managed:
