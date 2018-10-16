@@ -11,7 +11,7 @@ if [ ! -e "$downloaded_file" ]; then
     wget -c "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/$downloaded_file"
 fi
 
-if [ ! $extracted_dir_name ]; then
+if [ ! -e "$extracted_dir_name" ]; then
     tar -xvzf "$downloaded_file"
 fi
 
