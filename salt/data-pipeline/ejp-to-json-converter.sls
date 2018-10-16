@@ -17,18 +17,59 @@ install repo:
         - require:
             - builder: install repo
 
-    # this is where the container will read nifi data from (untested)
+    file.directory:
+        - name: /opt/data-pipeline-ejp-to-json-converter
+        - user: {{ pillar.elife.deploy_user.username }}
+        - group: {{ pillar.elife.deploy_user.username }}
+        - recurse:
+            - user
+            - group
+
+
+#
+# gcloud
+#
+
+install google-cloud-sdk:
+    archive.extracted:
+        - name: /opt
+        - source: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-220.0.0-linux-x86_64.tar.gz
+        - source_hash: a2205e35b11136004d52d47774762fbec9145bf0bda74ca506f52b71452c570e
+        #- source: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-218.0.0-linux-x86_64.tar.gz
+        #- source_hash: 9e7f336e4b332cbc56a53d3af7b74a8e
+        - user: {{ pillar.elife.deploy_user.username }}
+        - group: {{ pillar.elife.deploy_user.username }}
+
+    # run the install script
+    cmd.run:
+        - cwd: /opt/google-cloud-sdk
+        - runas: {{ pillar.elife.deploy_user.username }}
+        - name: |
+            set -e
+            ./install.sh --usage-reporting=no --quiet
+            ln -s /home/{{ pillar.elife.deploy_user.username }}
+            touch .installed.flag
+        - unless:
+            - test -e .installed.flag
+
+    file.managed:
+        - name: /etc/profile.d/google-cloud-sdk-scripts-path.sh
+        - contents: export PATH=/opt/google-cloud-sdk/bin:$PATH
+        - mode: 644
+
+{% if pillar.elife.env != "dev" %}
+configure google-cloud-sdk:
+    cmd.run:
+        - cwd: /home/{{ pillar.elife.deploy_user.username }}
+        - runas: {{ pillar.elife.deploy_user.username }}
+        - name: gcloud auth activate-service-account --key-file=/srv/nifi-1.7.1/conf/gcs.json && bq
+{% endif %}
+
+data directory:
+    # this is where the container will read nifi data from
     file.directory:
         - name: /ext/ejp-to-json-converter/data
         - makedirs: True
-
-# helper script that installs google cloud sdk inside a virtualenv
-install gcloud script:
-    file.managed:
-        - name: /ext/ejp-to-json-converter/gcloud.sh
-        - source: salt://data-pipeline/scripts/gcloud.sh
-        - makedirs: True
-        - mode: 740
 
 # helper script that ties all the docker commands together
 process file script:
