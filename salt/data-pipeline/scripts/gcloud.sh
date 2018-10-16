@@ -5,11 +5,13 @@
 set -e
 
 extracted_dir_name="google-cloud-sdk"
-rm -rf "$extracted_dir_name" "venv"
 
 downloaded_file="google-cloud-sdk-220.0.0-linux-x86_64.tar.gz"
 if [ ! -e "$downloaded_file" ]; then
     wget -c "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/$downloaded_file"
+fi
+
+if [ ! $extracted_dir_name ]; then
     tar -xvzf "$downloaded_file"
 fi
 
@@ -20,8 +22,10 @@ fi
 source venv/bin/activate
 
 if [ ! -e ".installed.flag" ]; then
-    "./$extracted_dir_name/install.sh" --usage-reporting=no --quiet
-    touch .installed.flag
+    # google's install.sh calls a python install.py which does who-knows-what
+    "./$extracted_dir_name/install.sh" --usage-reporting=no --quiet    
 fi
+
+touch .installed.flag
 
 PATH=$PATH:"$extracted_dir_name/bin"
