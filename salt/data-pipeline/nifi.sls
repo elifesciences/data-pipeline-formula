@@ -95,6 +95,11 @@ nifi-aws-properties:
         - source: salt://data-pipeline/config/srv-nifi-conf-aws.properties
         - template: jinja
 
+nifi-gcs-json:
+    file.managed:
+        - name: {{ nifi_dir }}/conf/gcs.json
+        - source: salt://data-pipeline/config/srv-nifi-conf-gcs.json
+
 nifi-config-auth:
     file.managed:
         - name: {{ nifi_dir }}/conf/authorizers.xml
