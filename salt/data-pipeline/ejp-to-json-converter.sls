@@ -78,3 +78,11 @@ process file script:
         - source: salt://data-pipeline/scripts/process-zip-apply.sh
         - makedirs: True
         - mode: 740
+
+# helper script that runs as update-big-query as the elife user
+update big query wrapper:
+    file.managed:
+        - name: /ext/ejp-to-json-converter/update-big-query-wrapper.sh
+        - source: salt://data-pipeline/scripts/update-big-query-wrapper.sh
+        - makedirs: True
+        - mode: 740
