@@ -62,7 +62,7 @@ configure google-cloud-sdk:
     cmd.run:
         - cwd: /home/{{ pillar.elife.deploy_user.username }}
         - runas: {{ pillar.elife.deploy_user.username }}
-        - name: gcloud auth activate-service-account --key-file=/srv/nifi-1.7.1/conf/gcs.json && bq
+        - name: gcloud auth activate-service-account --key-file=/srv/nifi-1.7.1/conf/gcs.json && bq version
 {% endif %}
 
 data directory:
