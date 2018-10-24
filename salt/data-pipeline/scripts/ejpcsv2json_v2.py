@@ -19,7 +19,7 @@ def parse_date(string):
 fh = fileinput.input()
 
 _, generated_date_header, _ = extra_header(fh)
-date_generated_fieldname, date_generated = "date_report_generated", parse_date(generated_date_header)
+date_generated_fieldname, date_generated = "date_generated", parse_date(generated_date_header)
 
 header_reader = csv.reader(fh)
 header = list(map(normalise, next(header_reader)))
