@@ -125,7 +125,7 @@ nifi-nginx-proxy:
             - service: nginx-server-service
 
 
-{% for filename in ["normheader.py", "ejpcsv2json.py"] %}
+{% for filename in ["ejpcsv2json.py", "ejpcsv2json_v2.py"] %}
 nifi-script-{{ filename }}:
     file.managed:
         - name: {{ nifi_dir }}/scripts/{{ filename }}
