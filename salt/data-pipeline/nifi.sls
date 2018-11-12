@@ -58,6 +58,14 @@ download-nifi-toolkit:
         - require:
             - file: download-nifi-toolkit
 
+# todo: there is configuration inside nifi referencing the '1.7.1' path. obviously not a good idea
+simple-path-symlink:
+    file.symlink:
+        - source: {{ nifi_dir }}
+        - destination: /srv/nifi
+        - require:
+            - download-nifi
+
 # this creates a /etc/init.d/ init file
 install-init-file:
     file.managed:
@@ -238,3 +246,14 @@ extend:
                 - install-ubr
                 - nifi backup script
 
+#
+# logging
+#
+
+syslog-ng config:
+    file.managed:
+        - name: /etc/syslog-ng/conf.d/nifi.conf
+        - source: salt://data-pipeline/config/etc-syslog-ng-conf.d-nifi.conf
+        - template: jinja
+        - defaults:
+            nifi_dir: {{ nifi_dir }}
