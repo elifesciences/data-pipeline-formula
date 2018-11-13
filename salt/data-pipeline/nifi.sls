@@ -5,6 +5,7 @@
 {% set nifi_dir = "/srv/nifi-1.7.1" %}
 {% set nifi_ext_dir = "/ext/nifi" %}
 {% set nifi_toolkit_dir = "/srv/nifi-toolkit-1.7.1" %}
+{% set nifi_registry_dir = "/srv/nifi-registry-0.3.0" %}
 
 # vagrant only
 # guest:/root/downloads -> guest:/vagrant -> host:./builder/downloads
@@ -58,19 +59,51 @@ download-nifi-toolkit:
         - require:
             - file: download-nifi-toolkit
 
+download-nifi-registry:
+    file.managed:
+        - name: /root/downloads/nifi-registry-0.3.0-bin.tar.gz
+        - source: https://www-eu.apache.org/dist/nifi/nifi-registry/nifi-registry-0.3.0/nifi-registry-0.3.0-bin.tar.gz
+        - source_hash: 4e432b6436881d641c45595cb98f7f6f3c396ca28dd85ce51c7b66c9b2bf8710
+        - makedirs: True
+        - replace: False
+        - require:
+            - vagrant-root-downloads-link
+
+    archive.extracted:
+        - user: {{ pillar.elife.deploy_user.username }}
+        - name: /srv/
+        - if_missing: {{ nifi_registry_dir }}
+        - source: /root/downloads/nifi-registry-0.3.0-bin.tar.gz
+        - source_hash: 4e432b6436881d641c45595cb98f7f6f3c396ca28dd85ce51c7b66c9b2bf8710
+        - makedirs: True
+        - replace: False
+        - require:
+            - file: download-nifi-registry
+
 # todo: there is configuration inside nifi referencing the '1.7.1' path. obviously not a good idea
-simple-path-symlink:
+nifi-symlink:
     file.symlink:
         - name: /srv/nifi
         - target: {{ nifi_dir }}
         - require:
             - download-nifi
 
-# this creates a /etc/init.d/ init file
+nifi-registry-symlink:
+    file.symlink:
+        - name: /srv/nifi-registry
+        - target: {{ nifi_registry_dir }}
+        - require:
+            - download-nifi-registry
+
 install-init-file:
     file.managed:
         - name: /lib/systemd/system/nifi.service
         - source: salt://data-pipeline/config/lib-systemd-system-nifi.service
+
+install-registry-init-file:
+    file.managed:
+        - name: /lib/systemd/system/nifi-registry.service
+        - source: salt://data-pipeline/config/lib-systemd-system-nifi-registry.service
 
 generate keystore:
     cmd.run:
@@ -115,14 +148,27 @@ nifi-config-auth:
         - watch_in:
             - service: nifi
 
+nifi-registry-config-properties:
+    file.managed:
+        - name: /srv/nifi-registry/conf/nifi-registry.properties
+        - source: salt://data-pipeline/config/srv-nifi-registry-conf-nifi-registry.properties
+
+#
+#
+#
+
 nifi:
-    # this can take a short while to come up
+    # this can take a while to come up
     service.running:
-        # doesn't seem to be working, use "service nifi start" or "systemctl start nifi"
-        # use "pgrep nifi" or "service nifi status" or "systemctl status nifi" to see if it's running
         - enable: True
         - watch:
             - nifi-config-properties
+
+nifi-registry:
+    service.running:
+        - enable: True
+        - watch:
+            - nifi-registry-config-properties
 
 nifi-nginx-proxy:
     file.managed:

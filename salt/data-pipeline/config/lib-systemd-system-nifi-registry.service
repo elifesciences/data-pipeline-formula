@@ -1,0 +1,14 @@
+[Unit]
+Requires=network.target
+After=network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Environment=JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
+Environment=NIFI_REGISTRY_HOME=/srv/nifi-registry
+# use 'run' vs 'start' for nifi. 
+# 'run' will start the process in the foreground so systemd can manage it
+ExecStart=/srv/nifi-registry/bin/nifi-registry.sh run
+ExecStop=/srv/nifi-registry/bin/nifi-registry.sh stop
