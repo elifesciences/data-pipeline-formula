@@ -18,6 +18,7 @@ download-nifi-registry:
         - source: /root/downloads/nifi-registry-0.3.0-bin.tar.gz
         - source_hash: 4e432b6436881d641c45595cb98f7f6f3c396ca28dd85ce51c7b66c9b2bf8710
         - makedirs: True
+        - trim_output: True
         - replace: False
         - require:
             - file: download-nifi-registry

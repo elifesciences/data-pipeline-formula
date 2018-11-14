@@ -39,6 +39,7 @@ install google-cloud-sdk:
         #- source_hash: 9e7f336e4b332cbc56a53d3af7b74a8e
         - user: {{ pillar.elife.deploy_user.username }}
         - group: {{ pillar.elife.deploy_user.username }}
+        - trim_output: True
 
     # run the install script
     cmd.run:
