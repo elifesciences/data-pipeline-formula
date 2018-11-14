@@ -46,7 +46,7 @@ generate registry keystore:
                 -storepass {{ pillar.data_pipeline.nifi_registry.keystore_password }} \
                 -keypass {{ pillar.data_pipeline.nifi_registry.key_password }}
         - unless:
-            - test -e /srv/nifi-registry/conf/nifi.keystore
+            - test -e /srv/nifi-registry/conf/nifi-registry.keystore
 
 nifi-registry-config-properties:
     file.managed:
