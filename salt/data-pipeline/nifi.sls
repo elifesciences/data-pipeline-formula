@@ -170,7 +170,8 @@ build nifi-bigquery-bundle:
         - name: |
             set -e
             cd /opt/nifi-bigquery-bundle
-            mvn clean install
+            # https://issues.apache.org/jira/browse/SUREFIRE-1588
+            _JAVA_OPTIONS=-Djdk.net.URLClassPath.disableClassPathURLCheck=true mvn clean install -q
             cp nifi-bigquery-nar/target/nifi-bigquery-nar-0.1.nar {{ nifi_dir }}/lib/
             rm -rf /opt/nifi-bigquery-bundle
         - require:
