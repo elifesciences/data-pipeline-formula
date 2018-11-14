@@ -10,3 +10,7 @@ data_pipeline:
         oidc:
             client_id: dummy-client-id
             client_secret: dummy-client-secret
+
+    nifi_registry:
+        keystore_password: dummyNzJjMWI2MmJhMGE3ZDhiZ
+        key_password: dummyNjZkZDQ3MjQ5ZmYxMTJjMmIy
