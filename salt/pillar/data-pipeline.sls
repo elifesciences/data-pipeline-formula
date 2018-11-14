@@ -14,3 +14,7 @@ data_pipeline:
     nifi_registry:
         keystore_password: dummyNzJjMWI2MmJhMGE3ZDhiZ
         key_password: dummyNjZkZDQ3MjQ5ZmYxMTJjMmIy
+
+elife:
+    swap:
+        size: 512 # MB
