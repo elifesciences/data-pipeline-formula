@@ -20,6 +20,6 @@ elife:
         size: 512 # MB
 
     web_users:
-        nifi-registry-:
+        nifi-registry-: # trailing hyphen not a typo
             username: nifi-registry-user
             password: dummy-password
