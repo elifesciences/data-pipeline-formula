@@ -18,3 +18,8 @@ data_pipeline:
 elife:
     swap:
         size: 512 # MB
+
+    web_users:
+        nifi-registry-:
+            username: nifi-registry-user
+            password: dummy-password
