@@ -58,15 +58,15 @@ download-nifi-toolkit:
         - require:
             - file: download-nifi-toolkit
 
+
 # todo: there is configuration inside nifi referencing the '1.7.1' path. obviously not a good idea
-simple-path-symlink:
+nifi-symlink:
     file.symlink:
         - name: /srv/nifi
         - target: {{ nifi_dir }}
         - require:
             - download-nifi
 
-# this creates a /etc/init.d/ init file
 install-init-file:
     file.managed:
         - name: /lib/systemd/system/nifi.service
@@ -116,10 +116,8 @@ nifi-config-auth:
             - service: nifi
 
 nifi:
-    # this can take a short while to come up
+    # this can take a while to come up
     service.running:
-        # doesn't seem to be working, use "service nifi start" or "systemctl start nifi"
-        # use "pgrep nifi" or "service nifi status" or "systemctl status nifi" to see if it's running
         - enable: True
         - watch:
             - nifi-config-properties
@@ -172,7 +170,8 @@ build nifi-bigquery-bundle:
         - name: |
             set -e
             cd /opt/nifi-bigquery-bundle
-            mvn clean install
+            # https://issues.apache.org/jira/browse/SUREFIRE-1588
+            _JAVA_OPTIONS=-Djdk.net.URLClassPath.disableClassPathURLCheck=true mvn clean install -q
             cp nifi-bigquery-nar/target/nifi-bigquery-nar-0.1.nar {{ nifi_dir }}/lib/
             rm -rf /opt/nifi-bigquery-bundle
         - require:

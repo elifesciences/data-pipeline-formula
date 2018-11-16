@@ -10,3 +10,16 @@ data_pipeline:
         oidc:
             client_id: dummy-client-id
             client_secret: dummy-client-secret
+
+    nifi_registry:
+        keystore_password: dummyNzJjMWI2MmJhMGE3ZDhiZ
+        key_password: dummyNjZkZDQ3MjQ5ZmYxMTJjMmIy
+
+elife:
+    swap:
+        size: 512 # MB
+
+    web_users:
+        nifi-registry-: # trailing hyphen not a typo
+            username: nifi-registry-user
+            password: dummy-password
