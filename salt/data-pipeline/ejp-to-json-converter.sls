@@ -25,6 +25,12 @@ install repo:
             - user
             - group
 
+temp dir symlink:
+    file.symlink:
+        - name: /ext/tmp/data-pipeline-ejp-to-json-converter-.temp
+        - target: /opt/data-pipeline-ejp-to-json-converter/.temp
+        - require:
+            install repo
 
 #
 # gcloud
