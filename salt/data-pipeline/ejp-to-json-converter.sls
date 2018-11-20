@@ -28,9 +28,13 @@ install repo:
             - group
 
 temp dir symlink:
+    cmd.run:
+        - name: mkdir -p /ext/tmp/data-pipeline-ejp-to-json-converter-.temp
+
     file.symlink:
-        - name: /ext/tmp/data-pipeline-ejp-to-json-converter-.temp
-        - target: /opt/data-pipeline-ejp-to-json-converter/.temp
+        - name: /opt/data-pipeline-ejp-to-json-converter/.temp
+        - target: /ext/tmp/data-pipeline-ejp-to-json-converter-.temp
+        #- makedirs: True # creates dirs to symlink, not target
         - require:
             - install repo
 
