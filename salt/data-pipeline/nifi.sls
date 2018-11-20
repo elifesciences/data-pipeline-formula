@@ -130,16 +130,13 @@ nifi-nginx-proxy:
         - watch_in:
             - service: nginx-server-service
 
-
-{% for filename in ["ejpcsv2json.py", "ejpcsv2json_v2.py", "csv2json.py"] %}
-nifi-script-{{ filename }}:
-    file.managed:
-        - name: {{ nifi_dir }}/scripts/{{ filename }}
-        - source: salt://data-pipeline/scripts/{{ filename }}
-        - makedirs: True
+# transitionary, remove
+# these scripts are now in the flow support repository /opt/flows/ejp-csv-deposit
+nifi-script-dir-removed:
+    file.absent:
+        - name: {{ nifi_dir }}/scripts/
         - require:
             - download-nifi
-{% endfor %}
 
 #
 # 
