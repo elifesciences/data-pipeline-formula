@@ -30,7 +30,7 @@ temp dir symlink:
         - name: /ext/tmp/data-pipeline-ejp-to-json-converter-.temp
         - target: /opt/data-pipeline-ejp-to-json-converter/.temp
         - require:
-            install repo
+            - install repo
 
 #
 # gcloud
