@@ -16,6 +16,8 @@ install repo:
         - name: docker-compose build
         - require:
             - builder: install repo
+        - unless:
+            - test -d /vagrant
 
     file.directory:
         - name: /opt/data-pipeline-ejp-to-json-converter
@@ -31,6 +33,26 @@ temp dir symlink:
         - target: /opt/data-pipeline-ejp-to-json-converter/.temp
         - require:
             - install repo
+
+install support repo:
+    builder.git_latest:
+        - name: git@github.com:elifesciences/data-pipeline-ejp-csv-deposit
+        - identity: {{ pillar.elife.projects_builder.key or '' }}
+        - rev: {{ salt['elife.rev']() }}
+        - branch: {{ salt['elife.branch']() }}
+        - target: /opt/flows/ejp-csv-deposit
+        - force_fetch: True
+        - force_checkout: True
+        - force_reset: True
+
+    file.directory:
+        - name:  /opt/flows/ejp-csv-deposit
+        - user: {{ pillar.elife.deploy_user.username }}
+        - group: {{ pillar.elife.deploy_user.username }}
+        - recurse:
+            - user
+            - group
+
 
 #
 # gcloud
