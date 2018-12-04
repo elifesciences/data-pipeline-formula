@@ -161,7 +161,7 @@ build nifi-bigquery-bundle:
         - branch: master
         - target: /opt/nifi-bigquery-bundle
         - unless:
-            - test -f {{ nifi_dir }}/lib/nifi-bigquery-nar-0.1.nar
+            - test -f {{ nifi_ext_dir }}/lib/nifi-bigquery-nar-0.1.nar
 
     cmd.run:
         - name: |
@@ -169,7 +169,7 @@ build nifi-bigquery-bundle:
             cd /opt/nifi-bigquery-bundle
             # https://issues.apache.org/jira/browse/SUREFIRE-1588
             _JAVA_OPTIONS=-Djdk.net.URLClassPath.disableClassPathURLCheck=true mvn clean install -q
-            cp nifi-bigquery-nar/target/nifi-bigquery-nar-0.1.nar {{ nifi_dir }}/lib/
+            cp nifi-bigquery-nar/target/nifi-bigquery-nar-0.1.nar {{ nifi_ext_dir }}/lib/
             rm -rf /opt/nifi-bigquery-bundle
         - require:
             - git: build nifi-bigquery-bundle
@@ -177,7 +177,7 @@ build nifi-bigquery-bundle:
         - watch_in:
             - service: nifi
         - unless:
-            - test -f {{ nifi_dir }}/lib/nifi-bigquery-nar-0.1.nar
+            - test -f {{ nifi_ext_dir }}/lib/nifi-bigquery-nar-0.1.nar
 
 #
 #
