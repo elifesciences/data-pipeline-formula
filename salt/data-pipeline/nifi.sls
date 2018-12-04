@@ -97,6 +97,20 @@ nifi-config-properties:
         - watch_in:
             - service: nifi
 
+# nifi.properties can specify where the lib directory is and the lib directory is about 1.5GB of jar/nar files
+# a bunch of other things still depend on it being at /path/to/nifi/lib though
+nifi-lib-symlink:
+    cmd.run:
+        - name: mv {{ nifi_dir }}/lib {{ nifi_ext_dir }}/lib
+        - onlyif:
+            - test -d {{ nifi_dir }}/lib
+
+    file.symlink:
+        - name: /srv/nifi/lib
+        - target: {{ nifi_ext_dir }}/lib
+        - require:
+            - cmd: nifi-lib-symlink
+
 nifi-aws-properties:
     file.managed:
         - name: {{ nifi_dir }}/conf/aws.properties
