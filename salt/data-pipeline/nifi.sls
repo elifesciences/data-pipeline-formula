@@ -58,6 +58,12 @@ download-nifi-toolkit:
         - require:
             - file: download-nifi-toolkit
 
+nifi-ext-dir:
+    file.directory:
+        - name: {{ nifi_ext_dir }}
+        - makedirs: True
+        - require:
+            - download-nifi
 
 # todo: there is configuration inside nifi referencing the '1.7.1' path. obviously not a good idea
 nifi-symlink:
@@ -94,6 +100,8 @@ nifi-config-properties:
             dev: {{ pillar.elife.env == 'dev' }}
             nifi_dir: {{ nifi_dir }}
             nifi_ext_dir: {{ nifi_ext_dir }}
+        - require:
+            - nifi-ext-dir
         - watch_in:
             - service: nifi
 
@@ -102,6 +110,8 @@ nifi-config-properties:
 nifi-lib-symlink:
     cmd.run:
         - name: mv {{ nifi_dir }}/lib {{ nifi_ext_dir }}/lib
+        - require:
+            - nifi-ext-dir
         - onlyif:
             - test -d {{ nifi_dir }}/lib
 
