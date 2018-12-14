@@ -29,7 +29,11 @@ install repo:
 
 temp dir symlink:
     cmd.run:
-        - name: mkdir -p /ext/tmp/data-pipeline-ejp-to-json-converter-.temp
+        - name: |
+            # if .temp already exists, move it to destination, otherwise create destination
+            test -d /opt/data-pipeline-ejp-to-json-converter/.temp && \
+            mv /opt/data-pipeline-ejp-to-json-converter/.temp /ext/tmp/data-pipeline-ejp-to-json-converter-.temp ||
+            mkdir -p /ext/tmp/data-pipeline-ejp-to-json-converter-.temp
 
     file.symlink:
         - name: /opt/data-pipeline-ejp-to-json-converter/.temp
