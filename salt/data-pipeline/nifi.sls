@@ -1,5 +1,10 @@
 # https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
-   
+
+increased security limits:
+    file.managed:
+        - name: /etc/security/limits.d/20-nifi.conf
+        - source: salt://data-pipeline/config/etc-security-limits.d-20-nifi.conf
+
 # download nifi and nifi-kit
 
 {% set nifi_dir = "/srv/nifi-1.7.1" %}
@@ -145,6 +150,7 @@ nifi:
         - enable: True
         - watch:
             - nifi-config-properties
+            - increased security limits
 
 nifi-nginx-proxy:
     file.managed:
