@@ -73,7 +73,7 @@ nifi-symlink:
         - require:
             - download-nifi
 
-install-init-file:
+nifi-init-file:
     file.managed:
         - name: /lib/systemd/system/nifi.service
         - source: salt://data-pipeline/config/lib-systemd-system-nifi.service
@@ -145,6 +145,7 @@ nifi:
         - enable: True
         - watch:
             - nifi-config-properties
+            - nifi-init-file
 
 nifi-nginx-proxy:
     file.managed:

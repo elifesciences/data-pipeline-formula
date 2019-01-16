@@ -8,6 +8,11 @@ WantedBy=multi-user.target
 [Service]
 Environment=JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 Environment=NIFI_HOME=/srv/nifi-1.7.1
+# ulimit rules
+# https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html#configuration-best-practices
+# see `man systemd.exec` and search for 'Limit'
+LimitNOPROC=10000
+LimitNOFILE=50000
 # use 'run' vs 'start' for nifi. 
 # 'run' will start the process in the foreground so systemd can manage it
 ExecStart=/srv/nifi-1.7.1/bin/nifi.sh run
