@@ -1,6 +1,6 @@
 # may one day live outside of data-pipeline project
 
-install repo:
+ejp-to-json-converter repo:
     builder.git_latest:
         - name: git@github.com:elifesciences/data-pipeline-ejp-to-json-converter
         - identity: {{ pillar.elife.projects_builder.key or '' }}
@@ -15,7 +15,7 @@ install repo:
         - cwd: /opt/data-pipeline-ejp-to-json-converter/
         - name: docker-compose build
         - require:
-            - builder: install repo
+            - builder: ejp-to-json-converter repo
         - unless:
             - test -d /vagrant
 
@@ -40,7 +40,7 @@ temp dir symlink:
         - target: /ext/tmp/data-pipeline-ejp-to-json-converter-.temp
         #- makedirs: True # creates dirs to symlink, not target
         - require:
-            - install repo
+            - ejp-to-json-converter repo
 
 install support repo:
     builder.git_latest:
