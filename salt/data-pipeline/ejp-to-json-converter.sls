@@ -4,8 +4,8 @@ ejp-to-json-converter repo:
     builder.git_latest:
         - name: git@github.com:elifesciences/data-pipeline-ejp-to-json-converter
         - identity: {{ pillar.elife.projects_builder.key or '' }}
-        - rev: {{ salt['elife.rev']() }}
-        - branch: {{ salt['elife.branch']() }}
+        - rev: master
+        - branch: master
         - target: /opt/data-pipeline-ejp-to-json-converter
         - force_fetch: True
         - force_checkout: True
@@ -42,12 +42,12 @@ temp dir symlink:
         - require:
             - ejp-to-json-converter repo
 
-install support repo:
+ejp-csv-deposit flow support repo:
     builder.git_latest:
         - name: git@github.com:elifesciences/data-pipeline-ejp-csv-deposit
         - identity: {{ pillar.elife.projects_builder.key or '' }}
-        - rev: {{ salt['elife.rev']() }}
-        - branch: {{ salt['elife.branch']() }}
+        - rev: master
+        - branch: master
         - target: /opt/flows/ejp-csv-deposit
         - force_fetch: True
         - force_checkout: True
@@ -60,6 +60,8 @@ install support repo:
         - recurse:
             - user
             - group
+        - require:
+            - builder: ejp-csv-deposit flow support repo
 
 
 #
@@ -71,8 +73,6 @@ install google-cloud-sdk:
         - name: /opt
         - source: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-220.0.0-linux-x86_64.tar.gz
         - source_hash: a2205e35b11136004d52d47774762fbec9145bf0bda74ca506f52b71452c570e
-        #- source: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-218.0.0-linux-x86_64.tar.gz
-        #- source_hash: 9e7f336e4b332cbc56a53d3af7b74a8e
         - user: {{ pillar.elife.deploy_user.username }}
         - group: {{ pillar.elife.deploy_user.username }}
         - trim_output: True

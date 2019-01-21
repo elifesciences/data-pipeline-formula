@@ -181,8 +181,6 @@ build nifi-bigquery-bundle:
     git.latest:
         - name: https://github.com/theShadow89/nifi-bigquery-bundle
         - rev: master
-        # salt keeps this at whatever was set at clone time.
-        # it's confusing to clone a specific revision but it still reports itself as being 'master' or 'develop'
         - branch: master
         - target: /opt/nifi-bigquery-bundle
         - unless:
