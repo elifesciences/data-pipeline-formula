@@ -2,8 +2,8 @@ clone biquery-views repo:
     builder.git_latest:
         - name: git@github.com:elifesciences/data-pipeline-bigquery-views
         - identity: {{ pillar.elife.projects_builder.key or '' }}
-        - rev: {{ salt['elife.rev']() }}
-        - branch: {{ salt['elife.branch']() }}
+        - rev: master
+        - branch: master
         - target: /opt/data-pipeline-bigquery-views
         - force_fetch: True
         - force_checkout: True
