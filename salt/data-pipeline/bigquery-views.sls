@@ -1,3 +1,11 @@
+bigquery-view docker image:
+    docker_image.present:
+        # without revision, 'latest' is assumed:
+        # https://docs.saltstack.com/en/latest/ref/states/all/salt.states.dockerng.html#salt.states.dockerng.image_present
+        - load: elifesciences/data-pipeline-bigquery-views
+        #- unless:
+        #    - test -d /vagrant
+
 clone biquery-views repo:
     builder.git_latest:
         - name: git@github.com:elifesciences/data-pipeline-bigquery-views
@@ -9,14 +17,6 @@ clone biquery-views repo:
         - force_checkout: True
         - force_reset: True
 
-    cmd.run:
-        - cwd: /opt/data-pipeline-bigquery-views
-        - name: docker-compose build
-        - require:
-            - builder: clone biquery-views repo
-        - unless:
-            - test -d /vagrant
-
     file.directory:
         - name: /opt/data-pipeline-bigquery-views
         - user: {{ pillar.elife.deploy_user.username }}
@@ -25,7 +25,7 @@ clone biquery-views repo:
             - user
             - group
         - require:
-            - cmd: clone biquery-views repo
+            - builder: clone biquery-views repo
 
 re-materialise views daily:
     cron.present:
