@@ -30,7 +30,7 @@ clone biquery-views repo:
 re-materialise views daily:
     cron.present:
         - user: {{ pillar.elife.deploy_user.username }}
-        - name: /opt/data-pipeline-bigquery-views/docker-views-cli.sh --dataset={{ pillar.elife.env }} materialize
+        - name: cd /opt/data-pipeline-bigquery-views && ./docker-views-cli.sh --dataset={{ pillar.elife.env }} materialize
         - identifier: materialize-views-daily
         # at 1000 every day
         - hour: "10"
