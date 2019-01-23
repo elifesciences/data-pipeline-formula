@@ -122,4 +122,5 @@ update big query wrapper:
         - name: /ext/ejp-to-json-converter/update-big-query-wrapper.sh
         - source: salt://data-pipeline/scripts/update-big-query-wrapper.sh
         - makedirs: True
+        - template: jinja
         - mode: 740
