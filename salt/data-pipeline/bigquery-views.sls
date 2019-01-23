@@ -3,34 +3,14 @@ bigquery-view docker image:
         # without revision, 'latest' is assumed:
         # https://docs.saltstack.com/en/latest/ref/states/all/salt.states.dockerng.html#salt.states.dockerng.image_present
         - load: elifesciences/data-pipeline-bigquery-views
-        #- unless:
-        #    - test -d /vagrant
-
-clone biquery-views repo:
-    builder.git_latest:
-        - name: git@github.com:elifesciences/data-pipeline-bigquery-views
-        - identity: {{ pillar.elife.projects_builder.key or '' }}
-        - rev: master
-        - branch: master
-        - target: /opt/data-pipeline-bigquery-views
-        - force_fetch: True
-        - force_checkout: True
-        - force_reset: True
-
-    file.directory:
-        - name: /opt/data-pipeline-bigquery-views
-        - user: {{ pillar.elife.deploy_user.username }}
-        - group: {{ pillar.elife.deploy_user.username }}
-        - recurse:
-            - user
-            - group
-        - require:
-            - builder: clone biquery-views repo
+        # this is a private image and Vagrant machines lack permissions
+        - unless:
+            - test -d /vagrant
 
 re-materialise views daily:
     cron.present:
         - user: {{ pillar.elife.deploy_user.username }}
-        - name: cd /opt/data-pipeline-bigquery-views && ./docker-views-cli.sh --dataset={{ pillar.elife.env }} materialize
+        - name: docker run -e DATA_PIPELINE_BQ_PROJECT=elife-data-pipeline elifesciences/data-pipeline-bigquery-views ./views-cli.sh --dataset={{ pillar.elife.env }} materialize
         - identifier: materialize-views-daily
         # at 1000 every day
         - hour: "10"
