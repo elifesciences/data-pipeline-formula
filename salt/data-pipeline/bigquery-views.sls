@@ -3,6 +3,8 @@ bigquery-view docker image:
         # specify tag in fully qualified name
         # https://docs.saltstack.com/en/latest/ref/states/all/salt.states.dockerng.html#salt.states.dockerng.image_present
         - name: elifesciences/data-pipeline-bigquery-views:{{ pillar.data_pipeline.bigquery_views.revision }}
+        # explicitly do not pull if already present, to avoid accidental updates
+        - force: False
         # this is a private image and Vagrant machines lack permissions
         - unless:
             - test -d /vagrant
