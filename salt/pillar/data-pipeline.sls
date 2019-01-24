@@ -15,6 +15,9 @@ data_pipeline:
         keystore_password: dummyNzJjMWI2MmJhMGE3ZDhiZ
         key_password: dummyNjZkZDQ3MjQ5ZmYxMTJjMmIy
 
+    bigquery_views:
+        revision: latest
+
 elife:
     swap:
         size: 512 # MB
