@@ -18,4 +18,4 @@ re-materialise views daily:
         - hour: "10"
         - minute: "0"
         - require:
-            - clone biquery-views repo
+            - bigquery-view docker image
