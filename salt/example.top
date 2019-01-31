@@ -5,8 +5,10 @@ base:
         - elife.nginx
         - elife.external-volume
         - elife.docker
+        - elife.docker-push
         - elife.swapspace
         - data-pipeline.nifi
         - data-pipeline.nifi-registry
         - data-pipeline.ejp-to-json-converter
+        - data-pipeline.bigquery-views
         - data-pipeline
