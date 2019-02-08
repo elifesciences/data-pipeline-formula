@@ -42,6 +42,7 @@ temp dir symlink:
         - require:
             - ejp-to-json-converter repo
 
+# DEPRECATED. superceded by 'flow support repo' state in nifi.sls
 ejp-csv-deposit flow support repo:
     builder.git_latest:
         - name: git@github.com:elifesciences/data-pipeline-ejp-csv-deposit

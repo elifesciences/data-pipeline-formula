@@ -155,13 +155,26 @@ nifi-nginx-proxy:
         - watch_in:
             - service: nginx-server-service
 
-# transitionary, remove
-# these scripts are now in the flow support repository /opt/flows/ejp-csv-deposit
-nifi-script-dir-removed:
-    file.absent:
-        - name: {{ nifi_dir }}/scripts/
+flow support repo:
+    builder.git_latest:
+        - name: git@github.com:elifesciences/data-pipeline-flow-support
+        - identity: {{ pillar.elife.projects_builder.key or '' }}
+        - rev: master
+        - branch: master
+        - target: /opt/flow-support
+        - force_fetch: True
+        - force_checkout: True
+        - force_reset: True
+
+    file.directory:
+        - name:  /opt/flow-support
+        - user: {{ pillar.elife.deploy_user.username }}
+        - group: {{ pillar.elife.deploy_user.username }}
+        - recurse:
+            - user
+            - group
         - require:
-            - download-nifi
+            - builder: flow support repo
 
 #
 # 
