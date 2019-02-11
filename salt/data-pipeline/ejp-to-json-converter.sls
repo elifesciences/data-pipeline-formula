@@ -42,27 +42,10 @@ temp dir symlink:
         - require:
             - ejp-to-json-converter repo
 
-# DEPRECATED. superceded by 'flow support repo' state in nifi.sls
+# deprecated 2019-02-11, remove this state once deployed
 ejp-csv-deposit flow support repo:
-    builder.git_latest:
-        - name: git@github.com:elifesciences/data-pipeline-ejp-csv-deposit
-        - identity: {{ pillar.elife.projects_builder.key or '' }}
-        - rev: master
-        - branch: master
-        - target: /opt/flows/ejp-csv-deposit
-        - force_fetch: True
-        - force_checkout: True
-        - force_reset: True
-
-    file.directory:
-        - name:  /opt/flows/ejp-csv-deposit
-        - user: {{ pillar.elife.deploy_user.username }}
-        - group: {{ pillar.elife.deploy_user.username }}
-        - recurse:
-            - user
-            - group
-        - require:
-            - builder: ejp-csv-deposit flow support repo
+    file.absent:
+        - name:  /opt/flows/
 
 
 #
