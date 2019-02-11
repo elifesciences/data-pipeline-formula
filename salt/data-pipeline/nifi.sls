@@ -127,6 +127,7 @@ nifi-aws-properties:
         - source: salt://data-pipeline/config/srv-nifi-conf-aws.properties
         - template: jinja
 
+# TODO: this should 'gcp', 'google cloud platform' rather than 'gcs', which is 'google cloud storage'
 nifi-gcs-json:
     file.managed:
         - name: {{ nifi_dir }}/conf/gcs.json
@@ -177,43 +178,22 @@ flow support repo:
             - builder: flow support repo
 
 #
+# 2019-02-11. section deprecated, removed once fully deployed
 # 
-#
-
-# this nifi-bigquery-bundle probably won't be around for much longer
-# it's very limited, very brittle and very different to other nifi processors
 
 grr:
-    pkg.installed:
+    pkg.purged:
         - pkgs:
             - openjdk-8-jdk-headless
             - maven
-        - install_recommends: False
 
 build nifi-bigquery-bundle:
-    git.latest:
-        - name: https://github.com/theShadow89/nifi-bigquery-bundle
-        - rev: master
-        - branch: master
-        - target: /opt/nifi-bigquery-bundle
-        - unless:
-            - test -f {{ nifi_ext_dir }}/lib/nifi-bigquery-nar-0.1.nar
+    file.absent:
+        - name: /opt/nifi-bigquery-bundle
 
-    cmd.run:
-        - name: |
-            set -e
-            cd /opt/nifi-bigquery-bundle
-            # https://issues.apache.org/jira/browse/SUREFIRE-1588
-            _JAVA_OPTIONS=-Djdk.net.URLClassPath.disableClassPathURLCheck=true mvn clean install -q
-            cp nifi-bigquery-nar/target/nifi-bigquery-nar-0.1.nar {{ nifi_ext_dir }}/lib/
-            rm -rf /opt/nifi-bigquery-bundle
-        - require:
-            - git: build nifi-bigquery-bundle
-            - grr
-        - watch_in:
-            - service: nifi
-        - unless:
-            - test -f {{ nifi_ext_dir }}/lib/nifi-bigquery-nar-0.1.nar
+remove nifi-bigquery-processor:
+    file.absent:
+        - name: {{ nifi_ext_dir }}/lib/nifi-bigquery-nar-0.1.nar
 
 #
 #
