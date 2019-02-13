@@ -99,6 +99,7 @@ process file script:
         - source: salt://data-pipeline/scripts/process-zip-apply.sh
         - makedirs: True
         - mode: 740
+        - template: jinja
 
 # helper script that runs as update-big-query as the elife user
 update big query wrapper:
