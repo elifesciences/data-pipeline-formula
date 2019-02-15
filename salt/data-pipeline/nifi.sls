@@ -63,7 +63,11 @@ nifi-ext-dir:
         - name: {{ nifi_ext_dir }}
         - makedirs: True
         - require:
+            - mount-external-volume
             - download-nifi
+        # ensure /ext exists before creating swapspace in there
+        - require_in:
+            - make-swap-space
 
 # todo: there is configuration inside nifi referencing the '1.7.1' path. obviously not a good idea
 nifi-symlink:
