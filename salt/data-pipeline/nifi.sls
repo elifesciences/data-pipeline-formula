@@ -112,14 +112,21 @@ nifi-lib-symlink:
         - name: mv {{ nifi_dir }}/lib {{ nifi_ext_dir }}/lib
         - require:
             - nifi-ext-dir
-        - onlyif:
-            - test -d {{ nifi_dir }}/lib
+        - unless: # symlink already exists
+            - test -h {{ nifi_dir }}/lib
 
     file.symlink:
-        - name: /srv/nifi/lib
+        - name: {{ nifi_dir }}/lib
         - target: {{ nifi_ext_dir }}/lib
         - require:
             - cmd: nifi-lib-symlink
+
+# 2019-02-15: temporary state
+remove infinite lib symlink:
+    file.absent:
+        - name: {{ nifi_dir }}/lib/lib
+        - require:
+            - nifi-lib-symlink
 
 nifi-aws-properties:
     file.managed:
