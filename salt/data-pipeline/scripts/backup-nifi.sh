@@ -18,16 +18,22 @@ else
     # maybe 100MB+
     mkdir -p {{ nifi_backup_dir }}
     (
+        # ignore these:
+        # state == runtime indexes of flowfiles
         cd {{ nifi_dir }}
-        
+        cp -R \
+            logs \
+            conf \
+            {{ nifi_backup_dir }}/
+    )
+
+    (
         # ignore these:
         # flowfile_repository == temporary flowfiles as they pass through this node
         # content_repository == flowfiles preserved for a certain amount of time in blobs
-        # state == runtime indexes of flowfiles
+        cd {{ nifi_ext_dir }}
         cp -R \
             provenance_repository \
-            logs \
-            conf \
             database_repository \
             {{ nifi_backup_dir }}/
     )
