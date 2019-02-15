@@ -221,6 +221,7 @@ nifi backup script:
         - template: jinja
         - defaults:
             nifi_dir: {{ nifi_dir }}
+            nifi_ext_dir: {{ nifi_ext_dir }}
             nifi_toolkit_dir: {{ nifi_toolkit_dir }}
             nifi_backup_dir: {{ backup_restore_dir }}
         - require:
