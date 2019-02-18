@@ -20,7 +20,7 @@ data_pipeline:
 
 elife:
     swap:
-        size: 512 # MB
+        path: /ext/swap.1
 
     web_users:
         nifi-registry-: # trailing hyphen not a typo
