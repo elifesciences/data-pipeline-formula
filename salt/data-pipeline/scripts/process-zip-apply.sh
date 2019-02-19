@@ -6,12 +6,11 @@ set -e
 source_zip=$1
 environment=${2:-{{ pillar.elife.env }}} # default to project instance env
 source_basename=$(basename "$source_zip")
-data_dir="/ext/ejp-to-json-converter/data"
+data_dir="/ext/ejp-to-json-converter/data/$environment"
 dbname="$DATA_PIPELINE_DATABASE_NAME" # "elife_etl", default set in .env file 
 
 # backwards compatibility
 if [ "$environment" != "prod" ]; then
-    data_dir="/ext/ejp-to-json-converter/$environment/data"
     dbname="$dbname_$environment" # "elife_etl_staging"
 fi
 
