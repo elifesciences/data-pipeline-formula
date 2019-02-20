@@ -8,7 +8,10 @@ base:
         - elife.docker-push
         - elife.swapspace
         - data-pipeline.nifi
-        - data-pipeline.nifi-registry
+
+        #- data-pipeline.nifi-registry
+        - data-pipeline.rm-nifi-registry
+
         - data-pipeline.ejp-to-json-converter
         - data-pipeline.bigquery-views
         - data-pipeline
