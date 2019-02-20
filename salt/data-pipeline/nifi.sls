@@ -125,24 +125,16 @@ nifi-lib-symlink:
         - require:
             - cmd: nifi-lib-symlink
 
-# 2019-02-15: temporary state
-remove infinite lib symlink:
-    file.absent:
-        - name: {{ nifi_dir }}/lib/lib
-        - require:
-            - nifi-lib-symlink
-
 nifi-aws-properties:
     file.managed:
         - name: {{ nifi_dir }}/conf/aws.properties
         - source: salt://data-pipeline/config/srv-nifi-conf-aws.properties
         - template: jinja
 
-# TODO: this should 'gcp', 'google cloud platform' rather than 'gcs', which is 'google cloud storage'
-nifi-gcs-json:
+nifi-gcp-json:
     file.managed:
-        - name: {{ nifi_dir }}/conf/gcs.json
-        - source: salt://data-pipeline/config/srv-nifi-conf-gcs.json
+        - name: {{ nifi_dir }}/conf/gcp.json
+        - source: salt://data-pipeline/config/srv-nifi-conf-gcp.json
 
 nifi-config-auth:
     file.managed:
