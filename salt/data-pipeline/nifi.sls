@@ -136,6 +136,10 @@ nifi-gcp-json:
         - name: {{ nifi_dir }}/conf/gcp.json
         - source: salt://data-pipeline/config/srv-nifi-conf-gcp.json
 
+old-nifi-gcs-json:
+    file.absent:
+        - name: {{ nifi_dir }}/conf/gcs.json
+
 nifi-config-auth:
     file.managed:
         - name: {{ nifi_dir }}/conf/authorizers.xml
@@ -143,14 +147,7 @@ nifi-config-auth:
         - watch_in:
             - service: nifi
 
-nifi:
-    # this can take a while to come up
-    service.running:
-        - enable: True
-        - watch:
-            - nifi-config-properties
-            - nifi-init-file
-
+# TODO: rename from 'nifi-demo.conf' to just 'nifi.conf'
 nifi-nginx-proxy:
     file.managed:
         - name: /etc/nginx/sites-enabled/nifi-demo.conf
@@ -180,23 +177,30 @@ flow support repo:
         - require:
             - builder: flow support repo
 
-#
-# 2019-02-11. section deprecated, removed once fully deployed
-# 
+deploy flow file:
+    cmd.run:
+        - cwd: /opt/flow-support # location of the flow file may still change
+        - name: |
+            set -e
+            systemctl stop nifi || echo "nifi already stopped"
+            gzip --keep --force flow.xml # creates flow.xml.gz, preserves flow.xml
+            cp flow.xml.gz "{{ nifi_dir }}/conf/flow.xml.gz"
+        - require:
+            - file: flow support repo
+        - onlyif:
+            # support flow file is newer than deployed one (based on modification date)
+            - test /opt/flow-support/flow.xml -nt {{ nifi_dir }}/conf/flow.xml.gz
 
-grr:
-    pkg.purged:
-        - pkgs:
-            - openjdk-8-jdk-headless
-            - maven
-
-build nifi-bigquery-bundle:
-    file.absent:
-        - name: /opt/nifi-bigquery-bundle
-
-remove nifi-bigquery-processor:
-    file.absent:
-        - name: {{ nifi_ext_dir }}/lib/nifi-bigquery-nar-0.1.nar
+nifi:
+    # this can take a while to come up
+    service.running:
+        - enable: True
+        - require:
+            - flow support repo
+        - watch:
+            - deploy flow file
+            - nifi-config-properties
+            - nifi-init-file
 
 #
 #
