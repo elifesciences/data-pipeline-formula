@@ -11,6 +11,11 @@ data_pipeline:
             client_id: dummy-client-id
             client_secret: dummy-client-secret
 
+        sensitive_props:
+            - key: ""
+            - algorithm: PBEWITHMD5AND256BITAES-CBC-OPENSSL
+            - provider: BC
+
     nifi_registry:
         keystore_password: dummyNzJjMWI2MmJhMGE3ZDhiZ
         key_password: dummyNjZkZDQ3MjQ5ZmYxMTJjMmIy
