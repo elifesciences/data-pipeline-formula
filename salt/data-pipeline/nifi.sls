@@ -18,7 +18,7 @@ vagrant-root-downloads-link:
 download-nifi:
     file.managed:
         - name: /root/downloads/nifi-1.7.1-bin.tar.gz
-        - source: http://www-eu.apache.org/dist/nifi/1.7.1/nifi-1.7.1-bin.tar.gz
+        - source: https://archive.apache.org/dist/nifi/1.7.1/nifi-1.7.1-bin.tar.gz
         - source_hash: 51dd598178992fa617cb28a8c77028b3
         - makedirs: True
         - replace: False
@@ -41,7 +41,7 @@ download-nifi:
 download-nifi-toolkit:
     file.managed:
         - name: /root/downloads/nifi-toolkit-1.7.1-bin.tar.gz
-        - source: http://www-eu.apache.org/dist/nifi/1.7.1/nifi-toolkit-1.7.1-bin.tar.gz
+        - source: https://archive.apache.org/dist/nifi/1.7.1/nifi-toolkit-1.7.1-bin.tar.gz
         - source_hash: 3247bb6194977da6dbf90d476289e0de
         - makedirs: True
         - replace: False
