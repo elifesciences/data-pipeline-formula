@@ -81,6 +81,8 @@ nifi-init-file:
     file.managed:
         - name: /lib/systemd/system/nifi.service
         - source: salt://data-pipeline/config/lib-systemd-system-nifi.service
+        - watch_in:
+            - service: nifi
 
 generate keystore:
     cmd.run:
@@ -137,27 +139,28 @@ nifi-aws-properties:
         - name: {{ nifi_dir }}/conf/aws.properties
         - source: salt://data-pipeline/config/srv-nifi-conf-aws.properties
         - template: jinja
+        - listen_in:
+            - service: nifi
 
-# TODO: this should 'gcp', 'google cloud platform' rather than 'gcs', which is 'google cloud storage'
+# TODO: this should be 'gcp', 'google cloud platform' rather than 'gcs', which is 'google cloud storage'
 nifi-gcs-json:
     file.managed:
         - name: {{ nifi_dir }}/conf/gcs.json
         - source: salt://data-pipeline/config/srv-nifi-conf-gcs.json
+        - listen_in:
+            - service: nifi
 
 nifi-config-auth:
     file.managed:
         - name: {{ nifi_dir }}/conf/authorizers.xml
         - source: salt://data-pipeline/config/srv-nifi-conf-authorizers.xml
-        - watch_in:
+        - listen_in:
             - service: nifi
 
 nifi:
     # this can take a while to come up
     service.running:
         - enable: True
-        - watch:
-            - nifi-config-properties
-            - nifi-init-file
 
 nifi-nginx-proxy:
     file.managed:
