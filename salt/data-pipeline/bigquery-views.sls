@@ -11,8 +11,8 @@ re-materialise views daily:
         - user: {{ pillar.elife.deploy_user.username }}
         - name: docker run --rm -v /srv/nifi/conf/gcs.json:/root/.config/gcs.json -e GOOGLE_APPLICATION_CREDENTIALS=/root/.config/gcs.json -e DATA_PIPELINE_BQ_PROJECT=elife-data-pipeline elifesciences/data-pipeline-bigquery-views:{{ pillar.data_pipeline.bigquery_views.revision }} ./views-cli.sh --dataset={{ pillar.elife.env }} materialize-views
         - identifier: materialize-views-daily
-        # at 1000 every day
-        - hour: "10"
+        # at 07:00am every day
+        - hour: "7"
         - minute: "0"
         - require:
             - bigquery-view docker image
