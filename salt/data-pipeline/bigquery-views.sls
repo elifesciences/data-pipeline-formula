@@ -17,5 +17,6 @@ re-materialise views hourly within working hours:
         - require:
             - bigquery-view docker image
 
+remove re-materialise views daily:
     cron.absent:
         - identifier: materialize-views-daily
