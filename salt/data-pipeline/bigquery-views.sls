@@ -19,4 +19,5 @@ re-materialise views hourly within working hours:
 
 remove re-materialise views daily:
     cron.absent:
+        - user: {{ pillar.elife.deploy_user.username }}
         - identifier: materialize-views-daily
