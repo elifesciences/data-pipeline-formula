@@ -7,6 +7,10 @@ bigquery-view docker image:
         - unless:
             - test -d /vagrant
 
+re-materialise views daily:
+    cron.absent:
+        - identifier: materialize-views-daily
+
 re-materialise views:
     cron.present:
         - user: {{ pillar.elife.deploy_user.username }}
