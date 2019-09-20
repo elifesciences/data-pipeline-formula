@@ -1,11 +1,11 @@
  
-{% set nifi_registry_dir = "/srv/nifi-registry-0.3.0" %}
+{% set nifi_registry_dir = "/srv/nifi-registry-0.4.0" %}
 
 download-nifi-registry:
     file.managed:
-        - name: /root/downloads/nifi-registry-0.3.0-bin.tar.gz
-        - source: https://www-eu.apache.org/dist/nifi/nifi-registry/nifi-registry-0.3.0/nifi-registry-0.3.0-bin.tar.gz
-        - source_hash: 4e432b6436881d641c45595cb98f7f6f3c396ca28dd85ce51c7b66c9b2bf8710
+        - name: /root/downloads/nifi-registry-0.4.0-bin.tar.gz
+        - source: https://www-eu.apache.org/dist/nifi/nifi-registry/nifi-registry-0.4.0/nifi-registry-0.4.0-bin.tar.gz
+        - source_hash: 7f19b19ba59ec0a9cc3428cab6c40e098143587bb23a837a6749a3b0b9e6167f
         - makedirs: True
         - replace: False
         - require:
@@ -15,8 +15,8 @@ download-nifi-registry:
         - user: {{ pillar.elife.deploy_user.username }}
         - name: /srv/
         - if_missing: {{ nifi_registry_dir }}
-        - source: /root/downloads/nifi-registry-0.3.0-bin.tar.gz
-        - source_hash: 4e432b6436881d641c45595cb98f7f6f3c396ca28dd85ce51c7b66c9b2bf8710
+        - source: /root/downloads/nifi-registry-0.4.0-bin.tar.gz
+        - source_hash: 7f19b19ba59ec0a9cc3428cab6c40e098143587bb23a837a6749a3b0b9e6167f
         - makedirs: True
         - trim_output: True
         - replace: False
