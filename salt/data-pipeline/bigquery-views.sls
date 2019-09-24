@@ -15,8 +15,8 @@ re-materialise views:
     cron.present:
         - user: {{ pillar.elife.deploy_user.username }}
         - name: docker run --rm -v /srv/nifi/conf/gcs.json:/root/.config/gcs.json -e GOOGLE_APPLICATION_CREDENTIALS=/root/.config/gcs.json -e DATA_PIPELINE_BQ_PROJECT=elife-data-pipeline elifesciences/data-pipeline-bigquery-views:{{ pillar.data_pipeline.bigquery_views.revision }} ./views-cli.sh --dataset={{ pillar.elife.env }} materialize-views
-        - identifier: materialize-views
-        # materialized view hourly within working hours
+        - identifier: materialise-views
+        # materialised view hourly within working hours
         - hour: "6-19"
         - minute: "0"
         - require:
