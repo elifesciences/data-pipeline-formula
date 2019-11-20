@@ -4,7 +4,7 @@
 download-nifi-registry:
     file.managed:
         - name: /root/downloads/nifi-registry-0.4.0-bin.tar.gz
-        - source: https://archive.apache.org/dist/nifi/nifi-registry/nifi-registry-0.4.0/nifi-registry-0.4.0-bin.tar.gz
+        - source: http://archive.apache.org/dist/nifi/nifi-registry/nifi-registry-0.4.0/nifi-registry-0.4.0-bin.tar.gz
         - source_hash: 7f19b19ba59ec0a9cc3428cab6c40e098143587bb23a837a6749a3b0b9e6167f
         - makedirs: True
         - replace: False
