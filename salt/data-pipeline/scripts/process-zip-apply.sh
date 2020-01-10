@@ -21,11 +21,11 @@ cd /opt/data-pipeline-ejp-to-json-converter
 DATA_PIPELINE_DATABASE_NAME=$dbname docker-compose run --rm \
     -v $data_dir:/data \
     ejp-to-json-converter \
-    python -m ejp_to_json_converter.stage_zip \
+    python3 -m ejp_to_json_converter.stage_zip \
     --source-zip "/data/$source_basename"
 
 DATA_PIPELINE_DATABASE_NAME=$dbname docker-compose run --rm \
     ejp-to-json-converter \
-    python -m ejp_to_json_converter.apply_changes
+    python3 -m ejp_to_json_converter.apply_changes
 
 rm -f "$actual_zip"
