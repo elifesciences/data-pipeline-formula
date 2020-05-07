@@ -1,1 +1,1 @@
-elifeFormula('data-pipeline', '/srv/nifi')
+elifeFormula('data-pipeline', '/srv/nifi', null, ['snsalt'])
